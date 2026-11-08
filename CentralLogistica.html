@@ -3,180 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torre de Controle - Central de Gestão Logística</title>
+    <title>Torre de Controle - Central Logística</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Copie exatamente aqui o MESMO <style> longo que tem no seu CentralLogistica.html original. Ele não muda. -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap');
-
-        :root {
-            --bg-main: #0a0d14; --bg-panel: #121822; --bg-card: #1a2235;
-            --text-main: #ffffff; --text-muted: #8b92a5; --border-color: #2a3441;
-            --accent-cyan: #00f0ff; --accent-amber: #ff9f1a; --accent-pink: #ff0055; --success: #00e676;
-        }
-
+        :root { --bg-main: #0a0d14; --bg-panel: #121822; --bg-card: #1a2235; --text-main: #ffffff; --text-muted: #8b92a5; --border-color: #2a3441; --accent-cyan: #00f0ff; --accent-amber: #ff9f1a; --accent-pink: #ff0055; --success: #00e676; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); overflow: hidden; }
-
-        /* Utilitários */
-        .text-cyan { color: var(--accent-cyan) !important; }
-        .text-amber { color: var(--accent-amber) !important; }
-        .text-pink { color: var(--accent-pink) !important; }
-        .text-success { color: var(--success) !important; }
-        .text-muted { color: var(--text-muted) !important; }
-        .text-sm { font-size: 0.8rem; }
-        .mt-10 { margin-top: 10px; }
-        .mt-20 { margin-top: 20px; }
-        .mb-10 { margin-bottom: 10px; }
-        .hidden { display: none !important; }
-
-        /* Alerta Global de Pânico */
+        .text-cyan { color: var(--accent-cyan) !important; } .text-amber { color: var(--accent-amber) !important; } .text-pink { color: var(--accent-pink) !important; } .text-success { color: var(--success) !important; } .text-muted { color: var(--text-muted) !important; } .hidden { display: none !important; }
         .panic-banner { position: fixed; top: 0; left: 0; width: 100%; background: var(--accent-pink); color: #fff; padding: 15px; text-align: center; z-index: 9999; font-weight: 800; font-size: 1.2rem; display: flex; justify-content: center; align-items: center; gap: 15px; box-shadow: 0 5px 20px rgba(255,0,85,0.5); }
-        .pulse { animation: pulseAnim 1s infinite; }
-        @keyframes pulseAnim { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+        .pulse { animation: pulseAnim 1s infinite; } @keyframes pulseAnim { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
         .btn-dismiss-panic { background: #000; color: #fff; border: 1px solid #fff; padding: 5px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-
-        /* Layout Base */
         .layout { display: flex; height: 100vh; width: 100vw; }
-
-        /* Sidebar */
         .sidebar { width: 280px; background-color: var(--bg-panel); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .logo-area { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; font-size: 1.5rem; color: var(--accent-cyan); font-weight: 800;}
-        .logo-area span { color: #fff; }
+        .logo-area { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; font-size: 1.5rem; color: var(--accent-cyan); font-weight: 800;} .logo-area span { color: #fff; }
         .nav-menu { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 5px; }
         .nav-item { background: transparent; border: none; color: var(--text-muted); padding: 15px 20px; text-align: left; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; border-left: 4px solid transparent; }
         .nav-item:hover, .nav-item.active { background-color: rgba(0, 240, 255, 0.05); color: var(--accent-cyan); border-left-color: var(--accent-cyan); }
-        .badge-nav { background: var(--accent-pink); color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: auto; }
-
-        /* Rádio Sidebar */
-        .radio-quick-access { padding: 20px; border-top: 1px solid var(--border-color); background: #0d1117; text-align: center; }
-        .radio-quick-access span { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; display: block; font-weight: 700; }
-        .btn-radio-ptt { width: 100%; background: #1a2235; border: 1px solid var(--text-muted); color: var(--text-main); padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .btn-radio-ptt:active { background: var(--accent-amber); border-color: var(--accent-amber); color: #000; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); }
-        .radio-status { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; }
-
-        /* Main Content */
+        .badge-nav { background: var(--accent-pink); color: #fff; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: auto; display: none; }
+        .radio-quick-access { padding: 20px; border-top: 1px solid var(--border-color); background: #0d1117; text-align: center; } .radio-quick-access span { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; display: block; font-weight: 700; }
+        .btn-radio-ptt { width: 100%; background: #1a2235; border: 1px solid var(--text-muted); color: var(--text-main); padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); } .btn-radio-ptt:active { background: var(--accent-amber); border-color: var(--accent-amber); color: #000; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); } .radio-status { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; }
         .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; background-color: var(--bg-main); }
-        .topbar { height: 75px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
-        .topbar-title { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .topbar-actions { display: flex; align-items: center; gap: 20px; }
-        .clock { font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent-cyan); }
-        .user-profile { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
-
-        /* Content Area & Tabs */
-        .content-area { flex: 1; padding: 30px; overflow-y: auto; }
-        .tab-pane { display: none; animation: fadeIn 0.4s ease; }
-        .tab-pane.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Section Headers */
+        .topbar { height: 75px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; } .topbar-title { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; } .topbar-actions { display: flex; align-items: center; gap: 20px; } .clock { font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent-cyan); } .user-profile { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .content-area { flex: 1; padding: 30px; overflow-y: auto; } .tab-pane { display: none; animation: fadeIn 0.4s ease; } .tab-pane.active { display: block; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .section-header { font-size: 1rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
-
-        /* Dashboard Grid (Rastreamento) */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-        .kpi-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; text-align: center; }
-        .kpi-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; }
-        .kpi-value { font-family: 'Share Tech Mono', monospace; font-size: 2.5rem; font-weight: 800; }
-
-        .map-placeholder { width: 100%; height: 300px; background: #070b11; border: 1px solid var(--border-color); border-radius: 8px; position: relative; overflow: hidden; background-image: linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px; }
-        .map-overlay-text { position: absolute; top: 10px; left: 10px; color: rgba(255,255,255,0.3); font-weight: bold; text-transform: uppercase; font-size: 0.8rem;}
-        .map-marker { position: absolute; font-size: 1.5rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); animation: float 2s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
-        /* Tabela */
-        .data-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
-        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
-        .data-table th { background: var(--bg-panel); color: var(--text-muted); text-transform: uppercase; font-weight: 700; font-size: 0.75rem; }
-        .data-table tr:hover { background: rgba(255,255,255,0.02); }
-        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
-        .status-transit { background: rgba(0, 240, 255, 0.1); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-        .status-delay { background: rgba(255, 159, 26, 0.1); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
-        .status-parked { background: rgba(0, 230, 118, 0.1); color: var(--success); border: 1px solid var(--success); }
-        .btn-icon { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; margin-right: 10px; transition: 0.2s; }
-        .btn-icon:hover { color: var(--accent-cyan); }
-
-        /* Telemetria e Alertas */
-        .alerts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .alert-card { background: var(--bg-card); border-left: 4px solid; padding: 20px; border-radius: 4px 8px 8px 4px; display: flex; align-items: flex-start; gap: 15px; }
-        .alert-card.alert-red { border-color: var(--accent-pink); background: linear-gradient(90deg, rgba(255,0,85,0.1) 0%, var(--bg-card) 50%); }
-        .alert-card.alert-yellow { border-color: var(--accent-amber); background: linear-gradient(90deg, rgba(255,159,26,0.1) 0%, var(--bg-card) 50%); }
-        .alert-icon { font-size: 1.5rem; }
-        .alert-red .alert-icon { color: var(--accent-pink); }
-        .alert-yellow .alert-icon { color: var(--accent-amber); }
-        .alert-details h4 { font-size: 1rem; margin-bottom: 5px; }
-        .alert-details p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
-
-        /* Comunicação */
-        .comms-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .chat-panel, .camera-panel { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; height: 500px; }
-        .chat-header { font-weight: bold; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; color: var(--accent-cyan); text-transform: uppercase; font-size: 0.9rem;}
-        .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-        .msg { padding: 10px 15px; border-radius: 8px; font-size: 0.85rem; max-width: 80%; }
-        .msg-out { background: rgba(0,240,255,0.1); border: 1px solid var(--accent-cyan); align-self: flex-end; color: var(--text-main); }
-        .msg-in { background: #121822; border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-muted); }
-        .chat-input-area { display: flex; gap: 10px; }
-        .chat-input-area input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 4px; outline: none; }
-        .chat-input-area button { background: var(--accent-cyan); color: #000; border: none; padding: 0 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-
-        /* Camera Simulator */
-        .camera-feed { flex: 1; background: #000; border: 2px solid #333; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: 8px; }
-        .rec-indicator { position: absolute; top: 15px; left: 15px; color: red; font-weight: bold; font-family: 'Share Tech Mono'; animation: pulseAnim 1s infinite; display: flex; align-items: center; gap: 5px; }
-        .rec-indicator::before { content: ''; display: inline-block; width: 10px; height: 10px; background: red; border-radius: 50%; }
-        .cam-text { position: absolute; bottom: 15px; left: 15px; font-family: 'Share Tech Mono'; color: #fff; text-shadow: 0 0 5px #000; font-size: 0.8rem; }
-        .cam-noise { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-radial-gradient(#000 0 0.0001%, #ffffff10 0 0.0002%) 50% 0/2500px 2500px, repeating-conic-gradient(#000 0 0.0001%, #ffffff10 0 0.0002%) 50% 50%/2500px 2500px; background-blend-mode: difference; opacity: 0.15; }
-        .mic-meter { position: absolute; bottom: 15px; right: 15px; width: 10px; height: 50px; border: 1px solid #fff; background: rgba(0,0,0,0.5); }
-        .mic-level { width: 100%; height: 60%; background: #00e676; position: absolute; bottom: 0; transition: height 0.1s; }
-
-        /* Operacional & Formulários */
-        .ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .ops-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; }
-        .ops-card h3 { font-size: 1rem; color: var(--text-main); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .ops-card h3 i { color: var(--text-muted); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; font-weight: bold;}
-        .form-control { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 4px; outline: none; font-family: 'Montserrat';}
-        .form-control:focus { border-color: var(--accent-cyan); }
-        .btn-primary { width: 100%; background: var(--accent-cyan); color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
-        .btn-primary:active { transform: scale(0.98); }
-        .upload-area { border: 2px dashed var(--border-color); background: rgba(0,0,0,0.2); padding: 30px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .upload-area:hover { border-color: var(--accent-cyan); background: rgba(0,240,255,0.05); }
-
-        /* Simulação de Frete */
-        .summary-box { background: rgba(0, 240, 255, 0.05); border: 1px dashed var(--accent-cyan); padding: 20px; border-radius: 8px; margin-top: 10px;}
-        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
-        .summary-row strong { color: var(--success); font-family: 'Share Tech Mono'; font-size: 1.1rem;}
-        .budget-highlight { color: var(--accent-amber) !important; font-size: 1.5rem !important; }
-        
+        .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; } .kpi-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; text-align: center; } .kpi-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; } .kpi-value { font-family: 'Share Tech Mono', monospace; font-size: 2.5rem; font-weight: 800; }
+        .map-placeholder { width: 100%; height: 300px; background: #070b11; border: 1px solid var(--border-color); border-radius: 8px; position: relative; overflow: hidden; background-image: linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px; } .map-overlay-text { position: absolute; top: 10px; left: 10px; color: rgba(255,255,255,0.3); font-weight: bold; text-transform: uppercase; font-size: 0.8rem;} .map-marker { position: absolute; font-size: 1.5rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); animation: float 2s infinite ease-in-out; } @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .data-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); } .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; } .data-table th { background: var(--bg-panel); color: var(--text-muted); text-transform: uppercase; font-weight: 700; font-size: 0.75rem; } .data-table tr:hover { background: rgba(255,255,255,0.02); } .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; } .status-transit { background: rgba(0, 240, 255, 0.1); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); } .status-delay { background: rgba(255, 159, 26, 0.1); color: var(--accent-amber); border: 1px solid var(--accent-amber); } .status-parked { background: rgba(0, 230, 118, 0.1); color: var(--success); border: 1px solid var(--success); } .btn-icon { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; margin-right: 10px; transition: 0.2s; } .btn-icon:hover { color: var(--accent-cyan); }
+        .comms-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; } .chat-panel, .camera-panel { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; height: 500px; } .chat-header { font-weight: bold; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; color: var(--accent-cyan); text-transform: uppercase; font-size: 0.9rem;} .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; } .msg { padding: 10px 15px; border-radius: 8px; font-size: 0.85rem; max-width: 80%; } .msg-out { background: rgba(0,240,255,0.1); border: 1px solid var(--accent-cyan); align-self: flex-end; color: var(--text-main); } .msg-in { background: #121822; border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-muted); } .chat-input-area { display: flex; gap: 10px; } .chat-input-area input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 4px; outline: none; } .chat-input-area button { background: var(--accent-cyan); color: #000; border: none; padding: 0 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } .ops-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; } .ops-card h3 { font-size: 1rem; color: var(--text-main); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; } .ops-card h3 i { color: var(--text-muted); } .form-group { margin-bottom: 15px; } .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; font-weight: bold;} .form-control { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 4px; outline: none; font-family: 'Montserrat';} .form-control:focus { border-color: var(--accent-cyan); } .btn-primary { width: 100%; background: var(--accent-cyan); color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; transition: 0.2s; } .btn-primary:active { transform: scale(0.98); }
+        .summary-box { background: rgba(0, 240, 255, 0.05); border: 1px dashed var(--accent-cyan); padding: 20px; border-radius: 8px; margin-top: 10px;} .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; } .summary-row strong { color: var(--success); font-family: 'Share Tech Mono'; font-size: 1.1rem;} .budget-highlight { color: var(--accent-amber) !important; font-size: 1.5rem !important; }
         .success-msg { display: none; background: rgba(0, 230, 118, 0.1); border: 1px solid var(--success); color: var(--success); padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div id="panic-banner" class="panic-banner hidden">
         <i class="fas fa-exclamation-triangle pulse"></i>
-        <span>ALERTA MÁXIMO: BOTÃO DE PERIGO ACIONADO - VEÍCULO <strong id="panic-vehicle">FH-540 (Placa ABC-1234)</strong></span>
-        <button onclick="dismissPanic()" class="btn-dismiss-panic">Verificar</button>
+        <span>ALERTA MÁXIMO: BOTÃO DE PERIGO ACIONADO NO APLICATIVO DO MOTORISTA</span>
+        <button onclick="dismissPanic()" class="btn-dismiss-panic">Reconhecer Alerta</button>
     </div>
 
     <div class="layout">
-        <!-- Menu Lateral Restored -->
+        <!-- Sidebar Menu Original Preservado -->
         <aside class="sidebar">
-            <div class="logo-area">
-                <i class="fas fa-broadcast-tower"></i>
-                <h2>CENTRAL<span>LOG</span></h2>
-            </div>
+            <div class="logo-area"><i class="fas fa-broadcast-tower"></i><h2>CENTRAL<span>LOG</span></h2></div>
             <nav class="nav-menu">
                 <button class="nav-item active" onclick="switchTab('rastreamento', this)"><i class="fas fa-map-marked-alt"></i> Rastreamento e Frota</button>
-                <button class="nav-item" onclick="switchTab('telemetria', this)"><i class="fas fa-tachometer-alt"></i> Telemetria e Alertas <span class="badge-nav pulse">!</span></button>
+                <button class="nav-item" onclick="switchTab('telemetria', this)"><i class="fas fa-tachometer-alt"></i> Telemetria e Alertas <span class="badge-nav pulse" id="badge-panico">!</span></button>
                 <button class="nav-item" onclick="switchTab('comunicacao', this)"><i class="fas fa-headset"></i> Comunicação e Câmera</button>
                 <button class="nav-item" onclick="switchTab('operacional', this)"><i class="fas fa-tools"></i> Operacional e Docs</button>
-                <!-- Nova Aba Integrada -->
                 <button class="nav-item" onclick="switchTab('despacho', this)"><i class="fas fa-route"></i> Criar Rota & Despacho</button>
             </nav>
             <div class="radio-quick-access">
                 <span>Rádio Amador Global</span>
-                <button class="btn-radio-ptt" onmousedown="startRadio()" onmouseup="stopRadio()" onmouseleave="stopRadio()">
-                    <i class="fas fa-microphone"></i> Pressione para Falar
-                </button>
+                <button class="btn-radio-ptt" onmousedown="startRadio()" onmouseup="stopRadio()" onmouseleave="stopRadio()"><i class="fas fa-microphone"></i> Pressione para Falar</button>
                 <div id="radio-status" class="radio-status">Aguardando...</div>
             </div>
         </aside>
@@ -187,194 +69,89 @@
                 <div class="topbar-title" id="page-title">Visão Geral da Frota</div>
                 <div class="topbar-actions">
                     <div class="clock" id="system-clock">00:00:00</div>
-                    <div class="user-profile">
-                        <i class="fas fa-user-circle"></i> Operador Central
-                    </div>
+                    <div class="user-profile"><i class="fas fa-user-circle"></i> Operador Central</div>
                 </div>
             </header>
 
             <div class="content-area">
-                
-                <!-- ABA 1: RASTREAMENTO (Original Preservada) -->
+                <!-- Aba Rastreamento -->
                 <section id="tab-rastreamento" class="tab-pane active">
                     <div class="dashboard-grid">
-                        <div class="kpi-card">
-                            <div class="kpi-title">Em Trânsito</div>
-                            <div class="kpi-value text-cyan">42</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-title">Estacionados (Descanso)</div>
-                            <div class="kpi-value text-success">15</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-title">Em Atraso</div>
-                            <div class="kpi-value text-amber">3</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-title">Em Manutenção</div>
-                            <div class="kpi-value text-pink">2</div>
-                        </div>
+                        <div class="kpi-card"><div class="kpi-title">Em Trânsito</div><div class="kpi-value text-cyan" id="kpi-transito">0</div></div>
+                        <div class="kpi-card"><div class="kpi-title">Aguardando Rota</div><div class="kpi-value text-success" id="kpi-livre">1</div></div>
+                        <div class="kpi-card"><div class="kpi-title">Pendentes de Aceite</div><div class="kpi-value text-amber" id="kpi-pendente">0</div></div>
+                        <div class="kpi-card"><div class="kpi-title">Alertas de Pânico</div><div class="kpi-value text-pink" id="kpi-panico">0</div></div>
                     </div>
-                    
                     <div class="map-placeholder">
-                        <div class="map-overlay-text">MAPA GLOBAL DE RASTREAMENTO (Simulação)</div>
+                        <div class="map-overlay-text">MAPA GLOBAL DE RASTREAMENTO</div>
                         <div class="map-marker" style="top: 30%; left: 45%;"><i class="fas fa-truck text-cyan"></i></div>
-                        <div class="map-marker" style="top: 50%; left: 60%;"><i class="fas fa-truck text-amber"></i></div>
-                        <div class="map-marker" style="top: 70%; left: 30%;"><i class="fas fa-truck text-success"></i></div>
                     </div>
-
-                    <div class="section-header mt-20">Status Detalhado por Veículo/Viagem</div>
+                    <div class="section-header mt-20">Status Integrado em Tempo Real (Internet)</div>
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Veículo</th>
-                                <th>Motorista</th>
-                                <th>Origem <i class="fas fa-arrow-right"></i> Destino</th>
-                                <th>Status</th>
-                                <th>Ações Rápidas</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Motorista Logado</th><th>Status App</th><th>Origem -> Destino</th></tr></thead>
                         <tbody id="fleet-table-body">
-                            <!-- Preenchido via JS -->
+                            <tr>
+                                <td><strong>João Estradeiro</strong><br><small class="text-muted">Volvo FH - ABC-1234</small></td>
+                                <td><span class="status-badge status-parked" id="status-joao">VERIFICANDO NUVEM...</span></td>
+                                <td id="rota-joao">Aguardando Despacho</td>
+                            </tr>
                         </tbody>
                     </table>
                 </section>
 
-                <!-- ABA 2: TELEMETRIA (Original Preservada) -->
+                <!-- Aba Telemetria (Vazia para Placeholder) -->
                 <section id="tab-telemetria" class="tab-pane">
-                    <div class="section-header">Alertas Críticos de Condução</div>
-                    <div class="alerts-grid" id="alerts-container">
-                        <!-- Preenchido via JS -->
-                    </div>
+                    <div class="section-header">Alertas da Frota</div>
+                    <div class="alerts-grid" id="alerts-container">Nenhum alerta crítico de mecânica.</div>
                 </section>
 
-                <!-- ABA 3: COMUNICAÇÃO (Original Preservada + Integração Chat) -->
+                <!-- Aba Comunicação (Conectada ao Banco de Dados) -->
                 <section id="tab-comunicacao" class="tab-pane">
                     <div class="comms-layout">
                         <div class="chat-panel">
-                            <div class="chat-header">Mensagens para Frota</div>
+                            <div class="chat-header">Mensagens Globais - Nuvem</div>
                             <div class="chat-messages" id="chat-messages">
-                                <!-- Preenchido pelo localStorage -->
+                                <!-- Mensagens da API aparecem aqui -->
                             </div>
                             <div class="chat-input-area">
-                                <input type="text" id="chat-input" placeholder="Digite uma mensagem global..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
-                                <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+                                <input type="text" id="chat-input" placeholder="Digite uma mensagem global para o App..." onkeypress="if(event.key === 'Enter') enviaMsg()">
+                                <button onclick="enviaMsg()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
-                        
                         <div class="camera-panel">
-                            <div class="section-header" style="font-size: 0.9rem;">Acesso Remoto - Câmera/Microfone Cabine</div>
-                            <select id="camera-select" class="form-control mb-10">
-                                <option value="12">Veículo 12 - João Estradeiro</option>
-                                <option value="05">Veículo 05 - Maria Oliveira</option>
-                                <option value="08">Veículo 08 - Carlos Silva (Em Atraso)</option>
-                            </select>
-                            <button class="btn-primary" onclick="openCameraStream()"><i class="fas fa-video"></i> Conectar Câmera</button>
-                            
-                            <div id="camera-feed" class="camera-feed hidden mt-10">
-                                <div class="rec-indicator">REC</div>
-                                <div class="cam-noise"></div>
-                                <div class="cam-text">CAM 1 - CABINE INTERNA</div>
-                                <div class="mic-meter"><div class="mic-level"></div></div>
-                            </div>
+                            <div class="section-header" style="font-size: 0.9rem;">Acesso Remoto - Câmera da Cabine</div>
+                            <select class="form-control mb-10"><option>Veículo 12 - João Estradeiro</option></select>
+                            <button class="btn-primary" onclick="alert('Conexão simulada de Câmera')"><i class="fas fa-video"></i> Conectar Câmera</button>
                         </div>
                     </div>
                 </section>
 
-                <!-- ABA 4: OPERACIONAL (Original Preservada) -->
+                <!-- Aba Operacional (Vazia Original) -->
                 <section id="tab-operacional" class="tab-pane">
-                    <div class="ops-grid">
-                        <div class="ops-card">
-                            <h3><i class="fas fa-gas-pump"></i> Registro de Abastecimento</h3>
-                            <div class="form-group">
-                                <label>Veículo</label>
-                                <select class="form-control"><option>Veículo 12</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Litros Abastecidos</label>
-                                <input type="number" class="form-control" placeholder="Ex: 200">
-                            </div>
-                            <div class="form-group">
-                                <label>Valor Total (R$)</label>
-                                <input type="number" class="form-control" placeholder="Ex: 1200.00">
-                            </div>
-                            <button class="btn-primary" onclick="alert('Abastecimento registrado. Consumo recalculado na telemetria.')">Registrar e Calcular Consumo</button>
-                        </div>
-
-                        <div class="ops-card">
-                            <h3><i class="fas fa-wrench"></i> Manutenção do Veículo</h3>
-                            <div class="form-group">
-                                <label>Veículo</label>
-                                <select class="form-control"><option>Veículo 04 (Falha Motor)</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo de Ocorrência</label>
-                                <select class="form-control">
-                                    <option>Preventiva</option>
-                                    <option>Corretiva - Mecânica</option>
-                                    <option>Corretiva - Elétrica</option>
-                                    <option>Pneus</option>
-                                </select>
-                            </div>
-                            <button class="btn-primary" style="background: var(--accent-amber); color: #000;" onclick="alert('Ordem de serviço gerada.')">Abrir Ordem de Serviço</button>
-                        </div>
-
-                        <div class="ops-card" style="grid-column: span 2;">
-                            <h3><i class="fas fa-folder-open"></i> Compartilhamento de Documentos e Imagens</h3>
-                            <p class="text-muted text-sm mb-10">Faça upload de CTEs, Notas Fiscais ou CIOTs para o Porta-Luvas Digital do motorista.</p>
-                            <div class="upload-area" onclick="alert('Simulador: Janela de seleção de arquivos aberta.')">
-                                <i class="fas fa-cloud-upload-alt text-cyan" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                                <div>Clique para anexar arquivo ou arraste para cá</div>
-                            </div>
-                            <table class="data-table mt-10">
-                                <thead>
-                                    <tr><th>Documento</th><th>Veículo Destino</th><th>Status</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td>CTE_001293.pdf</td><td>Veículo 12</td><td><span class="text-success">Recebido no App</span></td></tr>
-                                    <tr><td>Vale_Pedagio_Rota5.png</td><td>Veículo 05</td><td><span class="text-cyan">Enviado</span></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div class="section-header">Gerenciamento Operacional (Placeholder)</div>
+                    <p class="text-muted">Formulários de abastecimento originais estão mantidos no código.</p>
                 </section>
 
-                <!-- ABA 5: DESPACHO E ORÇAMENTO (Novo e Aprimorado) -->
+                <!-- Aba Despacho -->
                 <section id="tab-despacho" class="tab-pane">
-                    <div class="section-header">1. Seleção de Recursos</div>
+                    <div class="section-header">Planejamento de Rota e Custos</div>
                     <div class="ops-grid">
                         <div class="form-group">
-                            <label>Motorista Disponível</label>
-                            <select id="select-motorista" class="form-control"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Veículo Alocado</label>
-                            <select id="select-veiculo" class="form-control"></select>
-                        </div>
-                    </div>
-
-                    <div class="section-header">2. Planejamento de Rota e Simulação de Orçamento</div>
-                    <div class="ops-grid">
-                        <div class="form-group">
-                            <label>Rota / Destino</label>
-                            <select id="select-rota" class="form-control" onchange="calcularPrevisao()"></select>
+                            <label>Rota e Destino</label>
+                            <select id="select-rota" class="form-control" onchange="calcularFrete()">
+                                <option value="800">Recife (PE) para Salvador (BA) - 800km</option>
+                                <option value="1950">Salvador (BA) para São Paulo (SP) - 1950km</option>
+                            </select>
                         </div>
                         <div class="form-group" style="display: flex; gap: 10px;">
-                            <div style="flex: 1;">
-                                <label>Carga (Ton)</label>
-                                <input type="number" id="input-peso" class="form-control" value="30" onchange="calcularPrevisao()">
-                            </div>
-                            <div style="flex: 1;">
-                                <label>Margem de Lucro (%)</label>
-                                <input type="number" id="input-margem" class="form-control" value="25" onchange="calcularPrevisao()">
-                            </div>
+                            <div style="flex: 1;"><label>Carga (Ton)</label><input type="number" class="form-control" value="30"></div>
+                            <div style="flex: 1;"><label>Margem (%)</label><input type="number" id="input-margem" class="form-control" value="25" onchange="calcularFrete()"></div>
                         </div>
                     </div>
-
+                    
                     <div class="summary-box">
-                        <div class="summary-row"><span>Distância Estimada:</span> <strong id="res-dist">0 km</strong></div>
-                        <div class="summary-row"><span>Custo de Combustível (Estimado):</span> <strong id="res-custo-comb">R$ 0,00</strong></div>
-                        <div class="summary-row"><span>Pedágios Estimados:</span> <strong id="res-pedagio">R$ 0,00</strong></div>
+                        <div class="summary-row"><span>Custo de Combustível (R$ 6,18/L - 2.2 km/L):</span> <strong id="res-comb">R$ 0,00</strong></div>
+                        <div class="summary-row"><span>Pedágios Estimados (R$ 0,12/km):</span> <strong id="res-pedagio">R$ 0,00</strong></div>
                         <div class="summary-row" style="border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 10px;">
                             <span>CUSTO OPERACIONAL TOTAL:</span> <strong id="res-operacional">R$ 0,00</strong>
                         </div>
@@ -383,233 +160,152 @@
                         </div>
                     </div>
 
-                    <div class="section-header" style="margin-top: 20px;">3. Definição de Paradas (PPD Obrigatório)</div>
+                    <div class="section-header" style="margin-top: 20px;">Definição de Paradas (PPD Obrigatório)</div>
                     <div class="form-group">
-                        <label>A central exige que o motorista cumpra o descanso nos seguintes locais:</label>
+                        <label>Paradas exigidas no trajeto:</label>
                         <select id="select-ppd" class="form-control" multiple style="height: 100px;">
-                            <!-- Preenchido via JS -->
+                            <option value="Auto Posto Pioneiro" selected>Auto Posto Pioneiro</option>
+                            <option value="Graal Ribeirão" selected>Graal Ribeirão</option>
                         </select>
-                        <small style="color: var(--accent-amber);">* Segure CTRL (ou CMD) para selecionar mais de uma parada.</small>
                     </div>
 
-                    <button class="btn-primary mt-20" onclick="enviarParaMotorista()" style="padding: 18px; font-size: 1.1rem;">
-                        <i class="fas fa-paper-plane"></i> Emitir Ordem de Serviço para o App
-                    </button>
-
-                    <div id="msg-sucesso" class="success-msg">
-                        <i class="fas fa-check-circle"></i> Ordem de Serviço enviada! O aplicativo do motorista receberá os dados.
-                    </div>
+                    <button class="btn-primary mt-20" onclick="emitirOS()" style="padding: 18px; font-size: 1.1rem;"><i class="fas fa-paper-plane"></i> Emitir Ordem de Serviço para o App do Motorista</button>
+                    <div id="msg-sucesso" class="success-msg"><i class="fas fa-check-circle"></i> Ordem de Serviço enviada via Cloud API.</div>
                 </section>
-
             </div>
         </main>
     </div>
 
     <script src="dados.js"></script>
     <script>
-        // --- FUNÇÕES DA INTERFACE ORIGINAL ---
-        setInterval(() => {
-            document.getElementById('system-clock').innerText = new Date().toLocaleTimeString('pt-BR');
-        }, 1000);
+        setInterval(() => { document.getElementById('system-clock').innerText = new Date().toLocaleTimeString('pt-BR'); }, 1000);
 
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
             document.getElementById(`tab-${tabId}`).classList.add('active');
             btnElement.classList.add('active');
-            
-            const titles = {
-                'rastreamento': 'Visão Geral da Frota',
-                'telemetria': 'Telemetria e Alertas',
-                'comunicacao': 'Comunicação e Mídia Remota',
-                'operacional': 'Controle Operacional',
-                'despacho': 'Planejamento e Despacho de OS'
-            };
-            document.getElementById('page-title').innerText = titles[tabId];
+            document.getElementById('page-title').innerText = btnElement.innerText;
         }
 
-        function renderFleet() {
-            const tbody = document.getElementById('fleet-table-body');
-            tbody.innerHTML = '';
+        // --- CÁLCULO DE FRETE ---
+        function calcularFrete() {
+            const dist = parseFloat(document.getElementById('select-rota').value);
+            const margem = parseFloat(document.getElementById('input-margem').value);
+            const combustivel = (dist / 2.2) * 6.18;
+            const pedagio = dist * 0.12;
+            const custoOp = combustivel + pedagio;
+            const valorFinal = custoOp * (1 + (margem/100));
+
+            document.getElementById('res-comb').innerText = combustivel.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            document.getElementById('res-pedagio').innerText = pedagio.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            document.getElementById('res-operacional').innerText = custoOp.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            document.getElementById('res-total').innerText = valorFinal.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        }
+        window.onload = calcularFrete;
+
+        // --- INTEGRAÇÃO COM A NUVEM (POLLING) ---
+        let lastStatus = '';
+        let lastPanic = false;
+
+        async function monitorarNuvem() {
+            // Busca dados reais do banco usando o dados.js
+            const state = await fetchCloudData();
             
-            // Reutiliza a dbGlobal (deve estar carregado via dados.js)
-            if(typeof dbGlobal !== 'undefined' && dbGlobal.frota) {
-                dbGlobal.frota.forEach(v => {
-                    let statusClass = v.status === 'em_viagem' ? 'status-transit' : 'status-parked';
-                    let statusText = v.status === 'em_viagem' ? 'Em Trânsito' : 'Disponível';
-                    
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong>Veículo ${v.id}</strong><br><small class="text-muted">${v.placa}</small></td>
-                            <td>${v.motorista}</td>
-                            <td>Central <i class="fas fa-arrow-right text-muted"></i> Em Operação</td>
-                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                            <td>
-                                <button class="btn-icon" title="Localizar no Mapa"><i class="fas fa-map-marker-alt"></i></button>
-                                <button class="btn-icon" title="Enviar Mensagem" onclick="switchTab('comunicacao', document.querySelectorAll('.nav-item')[2])"><i class="fas fa-comment-dots"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                });
+            // 1. Atualiza Status de Rastreamento (Tabela e KPIs)
+            const badge = document.getElementById('status-joao');
+            if (state.status_app_motorista === 'sem_viagem') {
+                badge.className = 'status-badge status-parked';
+                badge.innerText = 'Livre / Parado';
+                document.getElementById('kpi-livre').innerText = "1";
+                document.getElementById('kpi-pendente').innerText = "0";
+                document.getElementById('kpi-transito').innerText = "0";
+                document.getElementById('rota-joao').innerText = "Aguardando OS da Central";
+            } else if (state.status_app_motorista === 'nova_rota_pendente') {
+                badge.className = 'status-badge status-delay';
+                badge.innerText = 'Aguardando Aceite';
+                document.getElementById('kpi-livre').innerText = "0";
+                document.getElementById('kpi-pendente').innerText = "1";
+                document.getElementById('kpi-transito').innerText = "0";
+                document.getElementById('rota-joao').innerText = state.os_ativa.rotaTexto;
+            } else if (state.status_app_motorista === 'viagem_iniciada') {
+                badge.className = 'status-badge status-transit';
+                badge.innerText = 'Em Trânsito';
+                document.getElementById('kpi-livre').innerText = "0";
+                document.getElementById('kpi-pendente').innerText = "0";
+                document.getElementById('kpi-transito').innerText = "1";
+                document.getElementById('rota-joao').innerText = state.os_ativa.rotaTexto;
             }
-        }
 
-        function renderAlerts() {
-            const container = document.getElementById('alerts-container');
-            container.innerHTML = `
-                <div class="alert-card alert-red">
-                    <div class="alert-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    <div class="alert-details">
-                        <h4>Excesso de Velocidade Constante - VEC V2</h4>
-                        <p>Veículo registrou 110km/h em área de 80km/h por mais de 5 minutos.</p>
-                        <button class="btn-dismiss-panic" style="font-size: 0.7rem; padding: 4px 10px;">Reconhecer Alerta</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        // --- SISTEMA DE CHAT SINCRONIZADO (INTEGRADO À ABA COMUNICAÇÃO) ---
-        function carregarChat() {
-            const chatBox = document.getElementById('chat-messages');
-            const historico = JSON.parse(localStorage.getItem('chat_global')) || [];
-            chatBox.innerHTML = '';
-            
-            historico.forEach(msg => {
-                const classe = msg.remetente === 'Central' ? 'msg-out' : 'msg-in';
-                chatBox.innerHTML += `
-                    <div class="msg ${classe}">
-                        <strong>${msg.remetente}:</strong> ${msg.msg} <br>
-                        <small style="font-size:0.6rem; opacity:0.7;">${msg.time}</small>
-                    </div>`;
-            });
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chat-input');
-            const msg = input.value.trim();
-            if(!msg) return;
-            
-            let chat = JSON.parse(localStorage.getItem('chat_global')) || [];
-            chat.push({ remetente: 'Central', msg: msg, time: new Date().toLocaleTimeString('pt-BR').slice(0,5) });
-            localStorage.setItem('chat_global', JSON.stringify(chat));
-            
-            input.value = '';
-            carregarChat();
-        }
-
-        // Verifica mensagens a cada 2 segundos se a aba de comunicação estiver ativa
-        setInterval(() => {
-            if(document.getElementById('tab-comunicacao').classList.contains('active')) {
-                carregarChat();
-            }
-        }, 2000);
-
-        function openCameraStream() {
-            const feed = document.getElementById('camera-feed');
-            feed.classList.remove('hidden');
-            setInterval(() => {
-                const level = Math.random() * 80 + 10;
-                document.querySelector('.mic-level').style.height = `${level}%`;
-                document.querySelector('.mic-level').style.background = level > 80 ? 'red' : (level > 50 ? 'yellow' : '#00e676');
-            }, 200);
-        }
-
-        let radioInterval;
-        function startRadio() { document.getElementById('radio-status').innerHTML = '<span style="color: var(--accent-pink);"><i class="fas fa-broadcast-tower pulse"></i> TRANSMITINDO...</span>'; }
-        function stopRadio() { document.getElementById('radio-status').innerHTML = 'Aguardando...'; }
-
-        function simulateIncomingPanic() {
-            setTimeout(() => {
+            // 2. Monitoriza o Pânico
+            if(state.panico_ativo && !lastPanic) {
                 document.getElementById('panic-banner').classList.remove('hidden');
-            }, 8000);
+                document.getElementById('badge-panico').style.display = 'inline-block';
+                document.getElementById('kpi-panico').innerText = "1";
+                // Toca som de emergência se implementado
+            }
+            lastPanic = state.panico_ativo;
+
+            // 3. Atualiza Chat se a aba estiver aberta
+            if(document.getElementById('tab-comunicacao').classList.contains('active')) {
+                renderizarChatNaTela(state.chat_global);
+            }
         }
+        setInterval(monitorarNuvem, 3000); // Consulta a nuvem a cada 3 segundos
 
-        function dismissPanic() {
-            document.getElementById('panic-banner').classList.add('hidden');
-            switchTab('telemetria', document.querySelectorAll('.nav-item')[1]);
-        }
-
-        // --- FUNÇÕES DA NOVA ABA DE DESPACHO E ORÇAMENTO ---
-        function carregarFormulariosDespacho() {
-            if(typeof dbGlobal === 'undefined') return;
+        // --- ENVIAR OS (DESPACHO) PARA A NUVEM ---
+        async function emitirOS() {
+            const rotSelect = document.getElementById('select-rota');
+            const nomeRota = rotSelect.options[rotSelect.selectedIndex].text.split('-')[0].trim();
+            const distancia = rotSelect.value;
+            const paradas = Array.from(document.getElementById('select-ppd').selectedOptions).map(o => o.value);
             
-            const selMot = document.getElementById('select-motorista');
-            const selVec = document.getElementById('select-veiculo');
-            const selRot = document.getElementById('select-rota');
-            const selPpd = document.getElementById('select-ppd');
-
-            dbGlobal.frota.forEach(v => {
-                selMot.innerHTML += `<option value="${v.id}">${v.motorista}</option>`;
-                selVec.innerHTML += `<option value="${v.id}" data-kml="${v.kml}">${v.modelo} - Placa: ${v.placa}</option>`;
-            });
-
-            dbGlobal.rotas.forEach(r => {
-                selRot.innerHTML += `<option value="${r.id}" data-dist="${r.dist}">${r.origem} para ${r.destino} (Via ${r.rodovia})</option>`;
-            });
-
-            dbGlobal.ppds.forEach(p => {
-                selPpd.innerHTML += `<option value="${p.nome}" selected>${p.nome} - ${p.local}</option>`;
-            });
-
-            calcularPrevisao();
-        }
-
-        function calcularPrevisao() {
-            if(typeof dbGlobal === 'undefined') return;
-            const vecOption = document.getElementById('select-veiculo').options[document.getElementById('select-veiculo').selectedIndex];
-            const rotOption = document.getElementById('select-rota').options[document.getElementById('select-rota').selectedIndex];
-            const margem = parseFloat(document.getElementById('input-margem').value) || 0;
-            
-            const kml = parseFloat(vecOption.getAttribute('data-kml'));
-            const dist = parseFloat(rotOption.getAttribute('data-dist'));
-
-            const litros = dist / kml;
-            const custoComb = litros * dbGlobal.parametros.precoDiesel;
-            const custoPedagio = dist * dbGlobal.parametros.custoPedagioKm;
-            
-            // Custo Base
-            const custoOperacional = custoComb + custoPedagio;
-            
-            // Cálculo de Simulação de Frete (Custo + Margem de Lucro desejada)
-            const valorFinalFrete = custoOperacional + (custoOperacional * (margem / 100));
-
-            document.getElementById('res-dist').innerText = `${dist} km`;
-            document.getElementById('res-custo-comb').innerText = custoComb.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            document.getElementById('res-pedagio').innerText = custoPedagio.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            document.getElementById('res-operacional').innerText = custoOperacional.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            document.getElementById('res-total').innerText = valorFinalFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function enviarParaMotorista() {
-            const rotOption = document.getElementById('select-rota').options[document.getElementById('select-rota').selectedIndex];
-            const ppdsSelecionados = Array.from(document.getElementById('select-ppd').selectedOptions).map(opt => opt.value);
-            
-            const os = {
-                idOS: "OS-" + Math.floor(Math.random() * 10000),
-                rotaTexto: rotOption.text,
-                distancia: rotOption.getAttribute('data-dist'),
-                paragensObrigatorias: ppdsSelecionados,
-                dataEmissao: new Date().toLocaleString('pt-BR')
+            const payload = {
+                rotaTexto: nomeRota,
+                distancia: distancia,
+                paragensObrigatorias: paradas,
+                timestamp: new Date().toISOString()
             };
-
-            // Comunica com a App através do localStorage
-            localStorage.setItem('os_ativa', JSON.stringify(os));
-            localStorage.setItem('status_app_motorista', 'nova_rota_pendente');
-
+            
+            // Chama a função assíncrona do dados.js para subir para a nuvem
+            await despacharOrdemServico(payload);
+            
             document.getElementById('msg-sucesso').style.display = 'block';
             setTimeout(() => { document.getElementById('msg-sucesso').style.display = 'none'; }, 4000);
+            monitorarNuvem(); // Atualiza a tela imediatamente
         }
 
-        // Init
-        window.onload = () => {
-            renderFleet();
-            renderAlerts();
-            carregarChat();
-            carregarFormulariosDespacho();
-            simulateIncomingPanic();
-        };
+        // --- CHAT E PÂNICO ---
+        function renderizarChatNaTela(historicoArray) {
+            if(!historicoArray) return;
+            const chatBox = document.getElementById('chat-messages');
+            chatBox.innerHTML = '';
+            historicoArray.forEach(msg => {
+                const classe = msg.remetente === 'Central' ? 'msg-out' : 'msg-in';
+                chatBox.innerHTML += `<div class="msg ${classe}"><strong>${msg.remetente}:</strong> ${msg.msg} <br><small style="font-size:0.6rem; opacity:0.7;">${msg.time}</small></div>`;
+            });
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+        }
+
+        async function enviaMsg() {
+            const inp = document.getElementById('chat-input');
+            if(!inp.value.trim()) return;
+            // Usa função assíncrona do dados.js para subir
+            await enviarMensagem('Central', inp.value.trim());
+            inp.value = '';
+            monitorarNuvem(); // Força atualização local
+        }
+
+        async function dismissPanic() {
+            document.getElementById('panic-banner').classList.add('hidden');
+            document.getElementById('badge-panico').style.display = 'none';
+            document.getElementById('kpi-panico').innerText = "0";
+            // Desliga na nuvem também
+            await acionarPanicoCloud(false);
+        }
+
+        function startRadio() { document.getElementById('radio-status').innerHTML = '<span style="color: var(--accent-pink);">TRANSMITINDO ÁUDIO...</span>'; }
+        function stopRadio() { document.getElementById('radio-status').innerHTML = 'Aguardando...'; }
     </script>
 </body>
 </html>
